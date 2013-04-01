@@ -1,0 +1,61 @@
+{
+   "abstract" : "Detects unused local functions",
+   "author" : [
+      "moznion <moznion@gmail.com>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Test-LocalFunctions",
+   "no_index" : {
+      "directory" : [
+         "inc"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::Builder::Tester" : "1.22",
+            "Test::More" : "0.98"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.40",
+            "Module::Build::Pluggable" : "0.09"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "PPI" : "1.215",
+            "Sub::Identify" : "0.04",
+            "Test::Builder::Module" : "0.98",
+            "parent" : "0",
+            "perl" : "5.010001"
+         }
+      }
+   },
+   "provides" : {
+      "Test::LocalFunctions" : {
+         "file" : "lib/Test/LocalFunctions.pm",
+         "version" : "0.01"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ]
+   },
+   "version" : "0.01",
+   "x_resource" : {
+      "license" : "http://dev.perl.org/licenses/",
+      "repository" : "git://github.com/moznion/Test--LocalFunctions.git"
+   }
+}

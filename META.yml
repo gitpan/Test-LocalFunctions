@@ -1,0 +1,36 @@
+---
+abstract: 'Detects unused local functions'
+author:
+  - 'moznion <moznion@gmail.com>'
+build_requires:
+  Test::Builder::Tester: 1.22
+  Test::More: 0.98
+configure_requires:
+  Module::Build: 0.40
+  Module::Build::Pluggable: 0.09
+dynamic_config: 1
+generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Test-LocalFunctions
+no_index:
+  directory:
+    - inc
+provides:
+  Test::LocalFunctions:
+    file: lib/Test/LocalFunctions.pm
+    version: 0.01
+requires:
+  PPI: 1.215
+  Sub::Identify: 0.04
+  Test::Builder::Module: 0.98
+  parent: 0
+  perl: 5.010001
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.01
+x_resource:
+  license: http://dev.perl.org/licenses/
+  repository: git://github.com/moznion/Test--LocalFunctions.git
