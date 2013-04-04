@@ -27,8 +27,7 @@
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.40",
-            "Module::Build::Pluggable" : "0.09"
+            "Module::Build" : "0.40"
          }
       },
       "runtime" : {
@@ -44,7 +43,7 @@
    "provides" : {
       "Test::LocalFunctions" : {
          "file" : "lib/Test/LocalFunctions.pm",
-         "version" : "0.02"
+         "version" : "0.03"
       }
    },
    "release_status" : "stable",
@@ -53,7 +52,7 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.02",
+   "version" : "0.03",
    "x_resource" : {
       "license" : "http://dev.perl.org/licenses/",
       "repository" : "git://github.com/moznion/Test--LocalFunctions.git"
