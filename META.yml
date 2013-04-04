@@ -21,7 +21,7 @@ no_index:
 provides:
   Test::LocalFunctions:
     file: lib/Test/LocalFunctions.pm
-    version: 0.01
+    version: 0.02
 requires:
   PPI: 1.215
   Sub::Identify: 0.04
@@ -30,7 +30,7 @@ requires:
   perl: 5.010001
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01
+version: 0.02
 x_resource:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/moznion/Test--LocalFunctions.git
