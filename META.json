@@ -43,7 +43,7 @@
    "provides" : {
       "Test::LocalFunctions" : {
          "file" : "lib/Test/LocalFunctions.pm",
-         "version" : "0.03"
+         "version" : "0.04"
       }
    },
    "release_status" : "stable",
@@ -52,7 +52,7 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.03",
+   "version" : "0.04",
    "x_resource" : {
       "license" : "http://dev.perl.org/licenses/",
       "repository" : "git://github.com/moznion/Test--LocalFunctions.git"
