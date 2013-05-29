@@ -40,7 +40,7 @@
       },
       "runtime" : {
          "recommends" : {
-            "Compiler::Lexer" : "12"
+            "Compiler::Lexer" : "0.12"
          },
          "requires" : {
             "Carp" : "0",
@@ -65,7 +65,7 @@
    "provides" : {
       "Test::LocalFunctions" : {
          "file" : "lib/Test/LocalFunctions.pm",
-         "version" : "0.05"
+         "version" : "0.06"
       },
       "Test::LocalFunctions::Fast" : {
          "file" : "lib/Test/LocalFunctions/Fast.pm"
@@ -88,7 +88,7 @@
          "web" : "https://github.com/moznion/Test--LocalFunctions"
       }
    },
-   "version" : "0.05",
+   "version" : "0.06",
    "x_contributors" : [
       "papix <mail@papix.net>",
       "moznion <moznion@gmail.com>"

@@ -29,7 +29,7 @@ no_index:
 provides:
   Test::LocalFunctions:
     file: lib/Test/LocalFunctions.pm
-    version: 0.05
+    version: 0.06
   Test::LocalFunctions::Fast:
     file: lib/Test/LocalFunctions/Fast.pm
   Test::LocalFunctions::PPI:
@@ -37,7 +37,7 @@ provides:
   Test::LocalFunctions::Util:
     file: lib/Test/LocalFunctions/Util.pm
 recommends:
-  Compiler::Lexer: 12
+  Compiler::Lexer: 0.12
 requires:
   Carp: 0
   Exporter: 0
@@ -52,7 +52,7 @@ resources:
   bugtracker: https://github.com/moznion/Test--LocalFunctions/issues
   homepage: https://github.com/moznion/Test--LocalFunctions
   repository: git://github.com/moznion/Test--LocalFunctions.git
-version: 0.05
+version: 0.06
 x_contributors:
   - 'papix <mail@papix.net>'
   - 'moznion <moznion@gmail.com>'
