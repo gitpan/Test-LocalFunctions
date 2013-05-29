@@ -5,7 +5,7 @@ use warnings;
 use Module::Load;
 use parent qw/Exporter/;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 our @EXPORT  = qw/all_local_functions_ok local_functions_ok/;
 
 my $backend_module = _select_backend_module();
@@ -30,18 +30,24 @@ Test::LocalFunctions - Detects unused local functions
 
 =head1 VERSION
 
-This document describes Test::LocalFunctions version 0.06
+This document describes Test::LocalFunctions version 0.07
 
 
 =head1 SYNOPSIS
 
-    use Test::LocalFunctions;
-
     # check modules that are listed in MANIFEST
+    use Test::LocalFunctions;
+    use Test::More;
+
     all_local_functions_ok();
+    done_testing;
 
     # you can also specify individual file
+    use Test::LocalFunctions;
+    use Test::More;
+
     local_functions_ok('/path/to/your/module_or_script');
+    done_testing;
 
 
 =head1 DESCRIPTION
