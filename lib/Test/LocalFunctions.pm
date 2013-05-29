@@ -2,164 +2,22 @@ package Test::LocalFunctions;
 
 use strict;
 use warnings;
-use Carp;
-use ExtUtils::Manifest qw/maniread/;
-use Sub::Identify qw/stash_name/;
-use PPI::Document;
-use PPI::Dumper;
+use Module::Load;
+use parent qw/Exporter/;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 our @EXPORT  = qw/all_local_functions_ok local_functions_ok/;
 
-use parent qw/Test::Builder::Module/;
+my $backend_module = _select_backend_module();
+load $backend_module;
+$backend_module->import;
 
-use constant _VERBOSE => ( $ENV{TEST_VERBOSE} || 0 );
-
-sub all_local_functions_ok {
-    my (%args) = @_;
-
-    my $builder = __PACKAGE__->builder;
-    my @libs    = _fetch_modules_from_manifest($builder);
-
-    $builder->plan( tests => scalar @libs );
-
-    my $fail = 0;
-    foreach my $lib (@libs) {
-        _local_functions_ok( $builder, $lib, \%args ) or $fail++;
-    }
-
-    return $fail == 0;
+sub _select_backend_module {
+    eval { require Compiler::Lexer };
+    return 'Test::LocalFunctions::PPI' if ( $ENV{T_LF_PPI} || $@ );
+    return 'Test::LocalFunctions::Fast';
 }
 
-sub local_functions_ok {
-    my ( $lib, %args ) = @_;
-    return _local_functions_ok( __PACKAGE__->builder, $lib, \%args );
-}
-
-sub _local_functions_ok {
-    my ( $builder, $file, $args ) = @_;
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-
-    my $pid = fork();
-    if ( defined $pid ) {
-        if ( $pid != 0 ) {
-            wait;
-            return $builder->ok( $? == 0, $file );
-        }
-        else {
-            exit _check_local_functions( $builder, $file, $args );
-        }
-    }
-    else {
-        die "failed forking: $!";
-    }
-}
-
-sub _check_local_functions {
-    my ( $builder, $file ) = @_;    # append $args later?
-
-    my $fail = 0;
-
-    my $module          = _get_module_name($file);
-    my @local_functions = _fetch_local_functions($module);
-    my $ppi_document    = _generate_PPI_document($file);
-    foreach my $local_function (@local_functions) {
-        unless ( $ppi_document =~ /$local_function\'/ ) {
-            $builder->diag( "Test::LocalFunctions failed: "
-                  . "'$local_function' is not used." );
-            $fail++;
-        }
-    }
-
-    return $fail;
-}
-
-sub _generate_PPI_document {
-    my $file = shift;
-
-    my $document = PPI::Document->new($file);
-    $document = _prune_from_PPI_document($document);
-
-    my $dumper = PPI::Dumper->new($document);
-    $document = _remove_declarations_sub( $dumper->string() );
-
-    return $document;
-}
-
-sub _remove_declarations_sub {
-    my $document = shift;
-
-    $document =~ s/
-        PPI::Statement::Sub \n
-            \s*? PPI::Token::Word \s* \'sub\' \n
-            \s*? PPI::Token::Whitespace .*? \n
-            \s*? PPI::Token::Word .*? \n
-    //gxm;
-
-    return $document;
-}
-
-sub _prune_from_PPI_document {
-    my $document = shift;
-
-    my @surplus_tokens = (
-        'Operator',  'Number', 'Comment', 'Pod',
-        'BOM',       'Data',   'End',     'Prototype',
-        'Separator', 'Quote',
-    );
-
-    foreach my $surplus_token (@surplus_tokens) {
-        $document->prune( 'PPI::Token::' . $surplus_token );
-    }
-
-    return $document;
-}
-
-sub _fetch_modules_from_manifest {
-    my $builder = shift;
-
-    if ( not -f $ExtUtils::Manifest::MANIFEST ) {
-        $builder->plan(
-            skip_all => "$ExtUtils::Manifest::MANIFEST doesn't exist" );
-    }
-    my $manifest = maniread();
-    my @libs = grep { m!\Alib/.*\.pm\Z! } keys %{$manifest};
-    return @libs;
-}
-
-sub _fetch_local_functions {
-    my $module = shift;
-
-    my @local_functions;
-
-    no strict 'refs';
-    while ( my ( $key, $value ) = each %{"${module}::"} ) {
-        next unless $key =~ /^_/;
-        next unless *{"${module}::${key}"}{CODE};
-        next if $module ne stash_name( $module->can($key) );
-        push @local_functions, $key;
-    }
-    use strict 'refs';
-
-    return @local_functions;
-}
-
-sub _get_module_name {
-    my $file = shift;
-
-    # e.g.
-    #   If file name is `lib/Foo/Bar.pm` then module name will be `Foo::Bar`
-    if ( $file =~ /\.pm/ ) {
-        my $module = $file;
-        $module =~ s!\A.*\blib/!!;
-        $module =~ s!\.pm\Z!!;
-        $module =~ s!/!::!g;
-        return $module;
-    }
-
-    return $file;
-}
 1;
 __END__
 
@@ -172,14 +30,18 @@ Test::LocalFunctions - Detects unused local functions
 
 =head1 VERSION
 
-This document describes Test::LocalFunctions version 0.04
+This document describes Test::LocalFunctions version 0.05
 
 
 =head1 SYNOPSIS
 
     use Test::LocalFunctions;
 
-    all_local_functions_ok(); # check modules that are listed in MANIFEST
+    # check modules that are listed in MANIFEST
+    all_local_functions_ok();
+
+    # you can also specify individual file
+    local_functions_ok('/path/to/your/module_or_script');
 
 
 =head1 DESCRIPTION
@@ -187,16 +49,23 @@ This document describes Test::LocalFunctions version 0.04
 Test::LocalFunctions finds unused local functions to clean up the source code.
 (Local function means the function which name starts from underscore.)
 
+This module decides back end module automatically. If `Compiler::Lexer` has been
+installed in target environment, this module will use `Compiler::Lexer` as back end.
+Elsewise this module will use `PPI`.
+
+`PPI` is not fast, but `Compiler::Lexer` is fast.
+So I recommend you to install `Compiler::Lexer`.
+
 
 =head1 METHODS
 
-=over
+=over 4
 
-=item C<< all_local_functions_ok >>
+=item * all_local_functions_ok
 
 This is a test function which finds unused variables from modules that are listed in MANIFEST file.
 
-=item C<< local_functions_ok >>
+=item * local_functions_ok
 
 This is a test function which finds unused variables from specified source code.
 This function requires an argument which is the path to source file.
@@ -206,18 +75,37 @@ This function requires an argument which is the path to source file.
 
 =head1 CONFIGURATION AND ENVIRONMENT
 
-Test::LocalFunctions requires no configuration files or environment variables.
+=over 4
+
+=item * T_LF_PPI (environment variable)
+
+This module uses `PPI` as back end forcedly if this environment variable is set any value.
+
+=back
 
 
 =head1 DEPENDENCIES
 
-PPI (version 1.215 or later)
+=over 4
 
-Sub::Identify (version 0.04 or later)
+=item * PPI (version 1.215 or later)
 
-Test::Builder::Module (version 0.98 or later)
+=item * Sub::Identify (version 0.04 or later)
 
-Test::Builder::Tester (version 1.22 or later)
+=item * Test::Builder::Module (version 0.98 or later)
+
+=item * Test::Builder::Tester (version 1.22 or later)
+
+=back
+
+
+=head1 RECOMMENDED
+
+=over 4
+
+=item * Compiler::Lexer (version 0.12 or later)
+
+=back
 
 
 =head1 INCOMPATIBILITIES
@@ -237,6 +125,8 @@ L<http://rt.cpan.org>.
 =head1 AUTHOR
 
 moznion  C<< <moznion@gmail.com> >>
+
+papix
 
 
 =head1 LICENCE AND COPYRIGHT

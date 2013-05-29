@@ -1,14 +1,17 @@
 ---
 abstract: 'Detects unused local functions'
 author:
-  - 'moznion <moznion@gmail.com>'
+  - 'moznion  C<< <moznion@gmail.com> >>'
 build_requires:
+  FindBin: 0
   Test::Builder::Tester: 1.22
   Test::More: 0.98
 configure_requires:
-  Module::Build: 0.40
-dynamic_config: 1
-generated_by: 'Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921'
+  CPAN::Meta: 0
+  CPAN::Meta::Prereqs: 0
+  Module::Build: 0.38
+dynamic_config: 0
+generated_by: 'Minilla/v0.4.4, CPAN::Meta::Converter version 2.130880'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,20 +19,40 @@ meta-spec:
 name: Test-LocalFunctions
 no_index:
   directory:
+    - t
+    - xt
     - inc
+    - share
+    - eg
+    - examples
+    - author
 provides:
   Test::LocalFunctions:
     file: lib/Test/LocalFunctions.pm
-    version: 0.04
+    version: 0.05
+  Test::LocalFunctions::Fast:
+    file: lib/Test/LocalFunctions/Fast.pm
+  Test::LocalFunctions::PPI:
+    file: lib/Test/LocalFunctions/PPI.pm
+  Test::LocalFunctions::Util:
+    file: lib/Test/LocalFunctions/Util.pm
+recommends:
+  Compiler::Lexer: 12
 requires:
+  Carp: 0
+  Exporter: 0
+  ExtUtils::Manifest: 0
+  Module::Load: 0
   PPI: 1.215
-  Sub::Identify: 0.04
+  Sub::Identify: 0
   Test::Builder::Module: 0.98
   parent: 0
-  perl: 5.010001
+  perl: 5.008006
 resources:
-  license: http://dev.perl.org/licenses/
-version: 0.04
-x_resource:
-  license: http://dev.perl.org/licenses/
+  bugtracker: https://github.com/moznion/Test--LocalFunctions/issues
+  homepage: https://github.com/moznion/Test--LocalFunctions
   repository: git://github.com/moznion/Test--LocalFunctions.git
+version: 0.05
+x_contributors:
+  - 'papix <mail@papix.net>'
+  - 'moznion <moznion@gmail.com>'
