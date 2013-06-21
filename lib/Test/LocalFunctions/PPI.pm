@@ -13,27 +13,30 @@ our @EXPORT = qw/all_local_functions_ok local_functions_ok/;
 use constant _VERBOSE => ( $ENV{TEST_VERBOSE} || 0 );
 
 sub all_local_functions_ok {
-    my (%args) = @_;
-    return Test::LocalFunctions::Receptor::all_local_functions_ok( __PACKAGE__, %args );
+    my ($args) = @_;
+    return Test::LocalFunctions::Receptor::all_local_functions_ok( __PACKAGE__, $args );
 }
 
 sub local_functions_ok {
-    my ( $lib, %args ) = @_;
-    return Test::LocalFunctions::Receptor::local_functions_ok( __PACKAGE__, $lib, \%args );
+    my ( $lib, $args ) = @_;
+    return Test::LocalFunctions::Receptor::local_functions_ok( __PACKAGE__, $lib, $args );
 }
 
 sub is_in_use {
-    my ( undef, $builder, $file ) = @_;    # append $args later?
+    my ( undef, $builder, $file, $args ) = @_;    # append $args later?
 
-    my $module          = Test::LocalFunctions::Util::extract_module_name($file);
-    my @local_functions = Test::LocalFunctions::Util::list_local_functions($module);
-    my $ppi_document    = _generate_PPI_document($file);
+    my $ignore_functions = $args->{ignore_functions};
+    my $module           = Test::LocalFunctions::Util::extract_module_name($file);
+    my @local_functions  = Test::LocalFunctions::Util::list_local_functions($module);
+    my $ppi_document     = _generate_PPI_document($file);
 
     my $fail = 0;
     foreach my $local_function (@local_functions) {
         unless ( $ppi_document =~ /$local_function\'/ ) {
-            $builder->diag( "Test::LocalFunctions failed: '$local_function' is not used." );
-            $fail++;
+            unless ( grep { $local_function =~ $_ } @$ignore_functions ) {
+                $builder->diag("Test::LocalFunctions failed: '$local_function' is not used.");
+                $fail++;
+            }
         }
     }
 

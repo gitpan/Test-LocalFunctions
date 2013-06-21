@@ -16,11 +16,7 @@ BEGIN {
 
 use Test::LocalFunctions::Fast;
 
-foreach my $lib (map{"t/resource/lib/Test/LocalFunctions/Succ$_.pm"} 1..1) {
-    if ($lib =~ /Succ\d*.pm/) {
-        require "Test/LocalFunctions/$&";
-    }
-    local_functions_ok($lib);
-}
+require "Test/LocalFunctions/Succ_with_ignore.pm";
+local_functions_ok( "t/resource/lib/Test/LocalFunctions/Succ_with_ignore.pm", { ignore_functions => [ '_bar', '_baz', '\A_foobar'] } );
 
 done_testing;

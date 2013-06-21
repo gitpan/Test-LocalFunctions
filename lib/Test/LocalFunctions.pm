@@ -6,7 +6,7 @@ use Test::LocalFunctions::Receptor;
 use Module::Load;
 use parent qw/Test::Builder::Module/;
 
-our $VERSION = '0.14';
+our $VERSION = '0.20';
 our @EXPORT  = qw/all_local_functions_ok local_functions_ok which_module_is_used/;
 
 my $backend_module;
@@ -21,13 +21,13 @@ BEGIN {
 }
 
 sub all_local_functions_ok {
-    my (%args) = @_;
-    return Test::LocalFunctions::Receptor::all_local_functions_ok( $backend_module, %args );
+    my ($args) = @_;
+    return Test::LocalFunctions::Receptor::all_local_functions_ok( $backend_module, $args );
 }
 
 sub local_functions_ok {
-    my ( $lib, %args ) = @_;
-    return Test::LocalFunctions::Receptor::local_functions_ok( $backend_module, $lib, \%args );
+    my ( $lib, $args ) = @_;
+    return Test::LocalFunctions::Receptor::local_functions_ok( $backend_module, $lib, $args );
 }
 
 sub which_backend_is_used {
@@ -45,7 +45,7 @@ Test::LocalFunctions - Detects unused local functions
 
 =head1 VERSION
 
-This document describes Test::LocalFunctions version 0.14
+This document describes Test::LocalFunctions version 0.20
 
 
 =head1 SYNOPSIS
@@ -53,15 +53,26 @@ This document describes Test::LocalFunctions version 0.14
     # check modules that are listed in MANIFEST
     use Test::LocalFunctions;
     use Test::More;
-
     all_local_functions_ok();
+    done_testing;
+
+    # you can specify modules to ignore the test
+    use Test::LocalFunctions;
+    use Test::More;
+    all_local_functions_ok({ignore_modules => ['Wanna::Ignore::Module']}); # Wanna::Ignore::Module will be ignored to testing
     done_testing;
 
     # you can also specify individual file
     use Test::LocalFunctions;
     use Test::More;
-
     local_functions_ok('/path/to/your/module_or_script');
+    done_testing;
+
+    # you can specify functions to exclude from test by regex.
+    use Test::LocalFunctions;
+    use Test::More;
+    local_functions_ok('/path/to/your/module_or_script', {ignore_functions => [qr/_wanna_ignore_function/]}); # _wanna_ignore_function() will be ignored to testing.
+    # all_local_functions_ok({ignore_functions => [qr/_wanna_ignore_function/]}); # <= also ok!
     done_testing;
 
 
