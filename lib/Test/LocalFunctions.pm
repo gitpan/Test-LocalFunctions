@@ -6,14 +6,14 @@ use Test::LocalFunctions::Receptor;
 use Module::Load;
 use parent qw/Test::Builder::Module/;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 our @EXPORT  = qw/all_local_functions_ok local_functions_ok which_module_is_used/;
 
 my $backend_module;
 BEGIN {
     my $select_backend_module = sub {
         eval { require Compiler::Lexer };
-        return 'Test::LocalFunctions::PPI' if ( $ENV{T_LF_PPI} || $@ );
+        return 'Test::LocalFunctions::PPI' if ( $ENV{T_LF_PPI} || $@ || $Compiler::Lexer::VERSION < 0.13 );
         return 'Test::LocalFunctions::Fast';
     };
     $backend_module = $select_backend_module->();
@@ -45,7 +45,7 @@ Test::LocalFunctions - Detects unused local functions
 
 =head1 VERSION
 
-This document describes Test::LocalFunctions version 0.21
+This document describes Test::LocalFunctions version 0.22
 
 
 =head1 SYNOPSIS
