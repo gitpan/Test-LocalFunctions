@@ -41,7 +41,7 @@
       },
       "runtime" : {
          "recommends" : {
-            "Compiler::Lexer" : "0.12"
+            "Compiler::Lexer" : "0.13"
          },
          "requires" : {
             "Carp" : "0",
@@ -66,7 +66,7 @@
    "provides" : {
       "Test::LocalFunctions" : {
          "file" : "lib/Test/LocalFunctions.pm",
-         "version" : "0.20"
+         "version" : "0.21"
       },
       "Test::LocalFunctions::Fast" : {
          "file" : "lib/Test/LocalFunctions/Fast.pm"
@@ -92,10 +92,10 @@
          "web" : "https://github.com/moznion/Test--LocalFunctions"
       }
    },
-   "version" : "0.20",
+   "version" : "0.21",
    "x_contributors" : [
-      "papix <mail@papix.net>",
       "Syohei YOSHIDA <syohex@gmail.com>",
-      "moznion <moznion@gmail.com>"
+      "papix <mail@papix.net>",
+      "Taiki Kawakami <moznion@gmail.com>"
    ]
 }
