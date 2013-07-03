@@ -29,7 +29,7 @@ no_index:
 provides:
   Test::LocalFunctions:
     file: lib/Test/LocalFunctions.pm
-    version: 0.22
+    version: 0.23
   Test::LocalFunctions::Fast:
     file: lib/Test/LocalFunctions/Fast.pm
   Test::LocalFunctions::PPI:
@@ -54,7 +54,7 @@ resources:
   bugtracker: https://github.com/moznion/Test--LocalFunctions/issues
   homepage: https://github.com/moznion/Test--LocalFunctions
   repository: git://github.com/moznion/Test--LocalFunctions.git
-version: 0.22
+version: 0.23
 x_contributors:
   - 'Syohei YOSHIDA <syohex@gmail.com>'
   - 'papix <mail@papix.net>'
